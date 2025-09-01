@@ -2,93 +2,94 @@ name: Build KeyboardOverlay
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-14
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: 'latest-stable'
-    
-    - name: Show Xcode and Swift versions
-      run: |
-        xcodebuild -version
-        swift --version
-    
-    - name: Build Debug
-      run: |
-        xcodebuild -project KeyboardOverlay.xcodeproj \
-                   -scheme "KeyboardOverlay" \
-                   -configuration Debug \
-                   -derivedDataPath ./DerivedData \
-                   build
-    
-    - name: Build Release
-      run: |
-        xcodebuild -project KeyboardOverlay.xcodeproj \
-                   -scheme "KeyboardOverlay" \
-                   -configuration Release \
-                   -derivedDataPath ./DerivedData \
-                   build
-    
-    - name: Archive Release
-      run: |
-        xcodebuild -project KeyboardOverlay.xcodeproj \
-                   -scheme "KeyboardOverlay" \
-                   -configuration Release \
-                   -derivedDataPath ./DerivedData \
-                   -archivePath ./KeyboardOverlay.xcarchive \
-                   archive
-    
-    - name: Create App Bundle
-      run: |
-        cp -R ./DerivedData/Build/Products/Release/Keyboard\ Overlay.app ./KeyboardOverlay.app
-    
-    - name: Create DMG
-      run: |
-        # Create a temporary directory for DMG contents
-        mkdir -p dmg_contents
-        cp -R ./KeyboardOverlay.app dmg_contents/
-        
-        # Create a symbolic link to Applications folder
-        ln -s /Applications dmg_contents/Applications
-        
-        # Create the DMG
-        hdiutil create -volname "Keyboard Overlay" \
-                       -srcfolder dmg_contents \
-                       -ov -format UDZO \
-                       KeyboardOverlay.dmg
-    
-    - name: Upload Debug Build
-      uses: actions/upload-artifact@v4
-      with:
-        name: KeyboardOverlay-Debug
-        path: ./DerivedData/Build/Products/Debug/Keyboard Overlay.app
-    
-    - name: Upload Release Build
-      uses: actions/upload-artifact@v4
-      with:
-        name: KeyboardOverlay-Release
-        path: ./KeyboardOverlay.app
-    
-    - name: Upload Archive
-      uses: actions/upload-artifact@v4
-      with:
-        name: KeyboardOverlay-Archive
-        path: ./KeyboardOverlay.xcarchive
-    
-    - name: Upload DMG
-      uses: actions/upload-artifact@v4
-      with:
-        name: KeyboardOverlay-DMG
-        path: ./KeyboardOverlay.dmg
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Show Xcode and Swift versions
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Build Debug
+        run: |
+          xcodebuild -project KeyboardOverlay.xcodeproj \
+                     -scheme "Keyboard Overlay" \
+                     -configuration Debug \
+                     -derivedDataPath ./DerivedData \
+                     build
+
+      - name: Build Release
+        run: |
+          xcodebuild -project KeyboardOverlay.xcodeproj \
+                     -scheme "Keyboard Overlay" \
+                     -configuration Release \
+                     -derivedDataPath ./DerivedData \
+                     build
+
+      - name: Archive Release
+        run: |
+          xcodebuild -project KeyboardOverlay.xcodeproj \
+                     -scheme "Keyboard Overlay" \
+                     -configuration Release \
+                     -derivedDataPath ./DerivedData \
+                     -archivePath ./KeyboardOverlay.xcarchive \
+                     archive
+
+      - name: Create App Bundle
+        run: |
+          cp -R "./DerivedData/Build/Products/Release/Keyboard Overlay.app" \
+                "./Keyboard Overlay.app"
+
+      - name: Create DMG
+        run: |
+          # Create a temporary directory for DMG contents
+          mkdir -p dmg_contents
+          cp -R "./Keyboard Overlay.app" dmg_contents/
+
+          # Create a symbolic link to Applications folder
+          ln -s /Applications dmg_contents/Applications
+
+          # Create the DMG
+          hdiutil create -volname "Keyboard Overlay" \
+                         -srcfolder dmg_contents \
+                         -ov -format UDZO \
+                         "Keyboard Overlay.dmg"
+
+      - name: Upload Debug Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyboardOverlay-Debug
+          path: ./DerivedData/Build/Products/Debug/Keyboard Overlay.app
+
+      - name: Upload Release Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyboardOverlay-Release
+          path: "./Keyboard Overlay.app"
+
+      - name: Upload Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyboardOverlay-Archive
+          path: ./KeyboardOverlay.xcarchive
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyboardOverlay-DMG
+          path: "./Keyboard Overlay.dmg"

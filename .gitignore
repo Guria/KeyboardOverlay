@@ -65,4 +65,6 @@ fastlane/test_output
 DerivedData/
 *.xcarchive
 *.dmg
+*.zip
 dmg_contents/
+Keyboard\ Overlay.app

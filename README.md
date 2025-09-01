@@ -33,13 +33,13 @@ This project uses GitHub Actions to automatically build binaries:
 To build locally with Xcode:
 ```bash
 # Build Debug version
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "KeyboardOverlay" -configuration Debug build
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Debug build
 
 # Build Release version  
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "KeyboardOverlay" -configuration Release build
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release build
 
 # Create archive
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "KeyboardOverlay" -configuration Release archive -archivePath KeyboardOverlay.xcarchive
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release archive -archivePath KeyboardOverlay.xcarchive
 ```
 
 ### Artifacts
