@@ -60,3 +60,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# GitHub Actions build artifacts
+DerivedData/
+*.xcarchive
+*.dmg
+dmg_contents/
