@@ -28,7 +28,7 @@ jobs:
       - name: Build Debug
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
-                     -scheme "Keyboard Overlay" \
+                     -scheme "KeyboardOverlay" \
                      -configuration Debug \
                      -derivedDataPath ./DerivedData \
                      build
@@ -36,7 +36,7 @@ jobs:
       - name: Build Release
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
-                     -scheme "Keyboard Overlay" \
+                     -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
                      build
@@ -44,7 +44,7 @@ jobs:
       - name: Archive Release
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
-                     -scheme "Keyboard Overlay" \
+                     -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
                      -archivePath ./KeyboardOverlay.xcarchive \
