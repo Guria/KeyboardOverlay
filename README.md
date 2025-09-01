@@ -17,6 +17,7 @@
 
 ## Requirements
 
+- Requires macOS 14 Sonoma or later.
 - Requires accessibility permission in the Privacy & Security section of the System Settings app to be able to detect keyboard events.
 
 ## Contributing

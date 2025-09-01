@@ -58,7 +58,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let contentView = KeyboardOverlayView()
             .ignoresSafeArea(.all)
-            .presentedWindowStyle(.plain)
 
         window!.contentView = NSHostingView(rootView: contentView)
         
