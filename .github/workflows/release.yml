@@ -1,0 +1,118 @@
+name: Release KeyboardOverlay
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag for release'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  release:
+    runs-on: macos-14
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Show Xcode and Swift versions
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Build Release
+        run: |
+          xcodebuild -project KeyboardOverlay.xcodeproj \
+                     -scheme "KeyboardOverlay" \
+                     -configuration Release \
+                     -derivedDataPath ./DerivedData \
+                     build
+
+      - name: Archive Release
+        run: |
+          xcodebuild -project KeyboardOverlay.xcodeproj \
+                     -scheme "KeyboardOverlay" \
+                     -configuration Release \
+                     -derivedDataPath ./DerivedData \
+                     -archivePath ./KeyboardOverlay.xcarchive \
+                     archive
+
+      - name: Create App Bundle
+        run: |
+          cp -R "./DerivedData/Build/Products/Release/Keyboard Overlay.app" \
+                "./Keyboard Overlay.app"
+
+      - name: Create DMG
+        run: |
+          # Create a temporary directory for DMG contents
+          mkdir -p dmg_contents
+          cp -R "./Keyboard Overlay.app" dmg_contents/
+
+          # Create a symbolic link to Applications folder
+          ln -s /Applications dmg_contents/Applications
+
+          # Create the DMG
+          hdiutil create -volname "Keyboard Overlay" \
+                         -srcfolder dmg_contents \
+                         -ov -format UDZO \
+                         "Keyboard Overlay.dmg"
+
+      - name: Create ZIP archive
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "./Keyboard Overlay.app" "Keyboard Overlay.zip"
+
+      - name: Get tag name
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: KeyboardOverlay ${{ steps.tag.outputs.tag }}
+          draft: false
+          prerelease: false
+          files: |
+            Keyboard Overlay.dmg
+            Keyboard Overlay.zip
+          body: |
+            ## KeyboardOverlay ${{ steps.tag.outputs.tag }}
+
+            **Features:**
+            - macOS menubar app that overlays a transparent keyboard on screen
+            - Supports any keyboard layout standard available on macOS
+            - Displays special characters with modifier key combinations
+            - Configurable keyboard shortcuts
+            - Works in full screen applications
+            - Mouse-transparent overlay
+
+            **Requirements:**
+            - macOS 14 Sonoma or later
+            - Accessibility permission required
+
+            **Downloads:**
+            - `Keyboard Overlay.dmg` - Disk image for easy installation
+            - `Keyboard Overlay.zip` - ZIP archive containing the app bundle
+
+            **Installation:**
+            1. Download the DMG file
+            2. Open the DMG and drag KeyboardOverlay.app to Applications
+            3. Run the app and grant accessibility permissions when prompted
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
