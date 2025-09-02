@@ -20,10 +20,17 @@ struct KeyView: View {
                 .shadow(color: .black.opacity(0.5), radius: 8, y: 4)
                 .compositingGroup()
             
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.black, lineWidth: 4)
-                .fill(Color.black)
-                .blendMode(.destinationOut)
+            if #available(macOS 14.0, *) {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.black, lineWidth: 4)
+                    .fill(Color.black)
+                    .blendMode(.destinationOut)
+            } else {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.black, lineWidth: 4)
+                    .background(Color.black)
+                    .blendMode(.destinationOut)
+            }
         }
         .compositingGroup()
         .frame(width: keyWidth.getWidth(), height: 75)
