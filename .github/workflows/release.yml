@@ -31,21 +31,23 @@ jobs:
           xcodebuild -version
           swift --version
 
-      - name: Build Release
+      - name: Build Release (Universal Binary)
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
                      -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
+                     ARCHS="x86_64 arm64" \
                      build
 
-      - name: Archive Release
+      - name: Archive Release (Universal Binary)
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
                      -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
                      -archivePath ./KeyboardOverlay.xcarchive \
+                     ARCHS="x86_64 arm64" \
                      archive
 
       - name: Create App Bundle
@@ -101,14 +103,16 @@ jobs:
             - Configurable keyboard shortcuts
             - Works in full screen applications
             - Mouse-transparent overlay
+            - **Universal Binary**: Native support for both Intel and Apple Silicon Macs
 
             **Requirements:**
             - macOS 14 Sonoma or later
             - Accessibility permission required
+            - Compatible with Intel (x86_64) and Apple Silicon (arm64) Macs
 
             **Downloads:**
-            - `Keyboard Overlay.dmg` - Disk image for easy installation
-            - `Keyboard Overlay.zip` - ZIP archive containing the app bundle
+            - `Keyboard Overlay.dmg` - Disk image for easy installation (Universal Binary)
+            - `Keyboard Overlay.zip` - ZIP archive containing the app bundle (Universal Binary)
 
             **Installation:**
             1. Download the DMG file
