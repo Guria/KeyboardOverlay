@@ -18,6 +18,7 @@
 ## Requirements
 
 - Requires macOS 14 Sonoma or later.
+- Compatible with both Intel (x86_64) and Apple Silicon (arm64) Macs.
 - Requires accessibility permission in the Privacy & Security section of the System Settings app to be able to detect keyboard events.
 
 ## Building
@@ -25,26 +26,26 @@
 This project uses GitHub Actions to automatically build binaries:
 
 ### Automated Builds
-- **Push to main**: Automatically builds Debug and Release versions
+- **Push to main**: Automatically builds Debug and Release versions as universal binaries
 - **Pull Requests**: Builds and tests changes  
-- **Tagged Releases**: Creates release with DMG and ZIP files
+- **Tagged Releases**: Creates release with universal binary DMG and ZIP files
 
 ### Manual Building
 To build locally with Xcode:
 ```bash
-# Build Debug version
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Debug build
+# Build Debug version (universal binary)
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Debug ARCHS="x86_64 arm64" build
 
-# Build Release version  
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release build
+# Build Release version (universal binary)
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release ARCHS="x86_64 arm64" build
 
-# Create archive
-xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release archive -archivePath KeyboardOverlay.xcarchive
+# Create archive (universal binary)
+xcodebuild -project KeyboardOverlay.xcodeproj -scheme "Keyboard Overlay" -configuration Release ARCHS="x86_64 arm64" archive -archivePath KeyboardOverlay.xcarchive
 ```
 
 ### Artifacts
-The GitHub Actions workflow produces:
-- Debug build (`.app` bundle)
+The GitHub Actions workflow produces universal binaries that support both Intel and Apple Silicon Macs:
+- Debug build (`.app` bundle) 
 - Release build (`.app` bundle) 
 - Archive (`.xcarchive`)
 - DMG installer

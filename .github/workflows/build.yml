@@ -25,29 +25,32 @@ jobs:
           xcodebuild -version
           swift --version
 
-      - name: Build Debug
+      - name: Build Debug (Universal Binary)
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
                      -scheme "KeyboardOverlay" \
                      -configuration Debug \
                      -derivedDataPath ./DerivedData \
+                     ARCHS="x86_64 arm64" \
                      build
 
-      - name: Build Release
+      - name: Build Release (Universal Binary)
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
                      -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
+                     ARCHS="x86_64 arm64" \
                      build
 
-      - name: Archive Release
+      - name: Archive Release (Universal Binary)
         run: |
           xcodebuild -project KeyboardOverlay.xcodeproj \
                      -scheme "KeyboardOverlay" \
                      -configuration Release \
                      -derivedDataPath ./DerivedData \
                      -archivePath ./KeyboardOverlay.xcarchive \
+                     ARCHS="x86_64 arm64" \
                      archive
 
       - name: Create App Bundle
